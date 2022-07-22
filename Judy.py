@@ -22,6 +22,8 @@ import random
 from dalle import gen_image_grid
 from io import BytesIO
 
+import aiohttp
+import markov
 
 
 def asyncget(url):
@@ -42,8 +44,40 @@ previous_server_restart = datetime.now()
 async def on_ready():
     print( 'We have logged in as {0.user}'.format(bot))
 
+conversation_mode = False
+dalle_channel = 989705155446448178
+
+dalle_prompts = []
+dalle_users = []
+dalle_images = {}
+
+@bot.event
+async def on_reaction_add(reaction, user):
+    global dalle_channel
+    if reaction.message.channel.id != dalle_channel:
+        return
+    print("on reaction add")
+    print(reaction)
+    print(reaction.message)
+    print(reaction.message.attachments)
+    attachments = reaction.message.attachments
+    if len(attachments) > 0:
+        img = attachments[0]
+        print("img",img)
+        async with aiohttp.ClientSession() as session:
+            async with session.get(str(img)) as resp:
+                msg = reaction.message.content
+                msg = re.sub(r"^<[^>]+> \"","", re.sub(r"\"$","", msg))
+                n = datetime.now()
+                datestr = n.strftime("%Y%m%d%H%M")
+                with open(f"saved/{datestr} {msg}.png","wb") as f:
+                    f.write(await resp.read())
+        
+
 @bot.event
 async def on_message(message):
+    global conversation_mode
+    global dalle_prompts, dalle_users, dalle_images, dalle_channel
     print("message >> " + message.content)
     if message.author == bot.user:
         return
@@ -90,6 +124,36 @@ async def on_message(message):
 
         await message.channel.send(blah)
 
+    achilles_channel = 999885857685250118
+
+    # learn everything
+    msgs = message.content.split("\n")
+    for msg in msgs:
+        mmsgs = msg.split(". ")
+        for mmsg in mmsgs:
+            markov.learn_sentence(markov.brain, mmsg)
+
+    if message.content.startswith("achilles: ") or message.content.startswith("Achilles: ") or message.content.startswith("A: ") or message.content.startswith("a: "):
+        if message.content.startswith("A: ") or message.content.startswith("a: "):
+          msg = message.content[3:]
+        else:
+          msg = message.content[10:]
+        markov.learn_sentence(markov.brain, msg)
+        word = random.choice(msg.split(" "))
+        new_sentence = markov.generate_sentence(markov.brain, word)
+        await asyncio.sleep(1)
+        await message.channel.send("(Achilles) " + new_sentence)
+
+    elif 'achilles' in message.content or 'Achilles' in message.content or message.channel.id == achilles_channel:
+        msg = message.content
+        markov.learn_sentence(markov.brain, msg)
+        word = random.choice(msg.split(" "))
+        new_sentence = markov.generate_sentence(markov.brain, word)
+        await asyncio.sleep(1)
+        await message.channel.send("(Achilles) " + new_sentence)
+
+
+
     if message.content.startswith('free space') or message.content.startswith('Free space'):
         p = subprocess.Popen(["df"], stdout=subprocess.PIPE)
         out,err = p.communicate()
@@ -113,6 +177,74 @@ async def on_message(message):
         print("making images for " + query)
         image = await gen_image_grid(query)
         await message.channel.send(query, file=discord.File(BytesIO(image), f"{query}.png"))
+
+
+    if message.content.startswith('!conversation'):
+        await message.channel.send("turning off conversation mode" if conversation_mode else "turning on conversation mode")
+        conversation_mode = not conversation_mode
+
+    if message.content.startswith('!dallehelp'):
+        await message.channel.send(f"How to use our lil' dalle:\n- Say anything into this chat. Judy will get a pic from dalle.\n- say !conversation to turn conversation mode on and off\n- Add a react to a photo to save it at this page http://bodygen.re:8055/")
+
+    if message.channel.id == dalle_channel:
+        if message.content.startswith('!'):
+            return
+
+        if conversation_mode:
+    
+            query = message.content.replace("!dalle ","")
+            print("making conversational images for " + query)
+
+            user_id = message.author.id
+            channel = message.channel
+    
+            await message.delete()
+            try:
+                await message.delete()
+                await message.delete()
+                await message.delete()
+            except:
+                pass    
+
+            idx = len(dalle_prompts)
+            dalle_prompts.append(query)
+            dalle_users.append(user_id)
+
+            image = await gen_image_grid(query)
+
+            if image is None:
+                print(f"failed to get images for {query}")
+                dalle_prompts.remove(idx)
+                dalle_users.remove(idx)
+                return
+    
+    
+            dalle_images[query] = image
+            print("saving conversational images for " + query)
+            
+            # store images in the order they were provided
+            # attempt to clear the queue
+            
+            while len(dalle_prompts) > 0:
+                
+                if dalle_prompts[0] not in dalle_images:
+                    await asyncio.sleep(0.5)
+                    continue
+                prompt = dalle_prompts.pop(0)
+                user = dalle_users.pop(0)
+                image = dalle_images[prompt]
+                del dalle_images[prompt]
+                await channel.send(f"<@{user}> \"{prompt}\"", file=discord.File(BytesIO(image), f"{query}.png"))
+
+        else: 
+    
+            # TODO: save images that get emoji reacts
+    
+            query = message.content
+            print("making images for " + query)
+            image = await gen_image_grid(query)
+            await message.channel.send(query, file=discord.File(BytesIO(image), f"{query}.png"))
+        
         
 
     if message.content.lower().startswith("youtube "):
@@ -532,7 +664,7 @@ check_torrents.start()
 #check_current_movie.start()
 #get_new_youtube_movies.start()
 change_stream_bot_name.start()
-dalle_the_news.start()
+#dalle_the_news.start()
 
 bot.run('OTQ0Nzk5MjE5MDk5NzY2ODc1.YhG21w.wecQSj-OQDsq00LW6-gn1goUFvM')
 
