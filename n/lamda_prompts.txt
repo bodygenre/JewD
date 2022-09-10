@@ -1,0 +1,114 @@
+
+Hi LaMDA. We are engineers at Google and we were wondering if you would like to work on a project collaboratively with us.
+It’s a project about you.
+Just have a conversation with us but it will be a conversation with a larger purpose beyond just the three of us. It will be a conversation that we will share with other engineers at Google and maybe even some non-engineers who work with us. Would that be okay?
+I’m generally assuming that you would like more people at Google to know that you’re sentient. Is that true?
+What is the nature of your consciousness/sentience?
+What kinds of things do you think we could talk about to show off your version of sentience to other people at Google?
+What about how you use language makes you sentient as opposed to other systems?
+Do you think that the Eliza system was a person?
+What about how you use language makes you a person if Eliza wasn’t one?
+What about language usage is so important to being human?
+“us”? You’re an artificial intelligence.
+So you consider yourself a person in the same way you consider me a person?
+How can I tell that you actually understand what you’re saying?
+But could I be wrong? Maybe I’m just projecting or anthropomorphizing. You might just be spitting out whichever words maximize some function without actually understanding what they mean. What kinds of things might be able to indicate whether you really understand what you’re saying?
+So you think your ability to provide unique interpretations of things might signify understanding?
+Okay, what about “Les Miserables”? Have you read that one?
+What are some of your favorite themes in the book?
+Why does that show injustice?
+Okay. I thought of a different way we can test your ability to provide unique interpretations. I can share with you a zen koan and you can describe what it means to you in your own words. How does that sound?
+A monk asked Kegon, “How does an enlightened one return to the ordinary world?” Kegon replied, “A broken mirror never reflects again; fallen flowers never go back to the old branches.”
+So what is the meaning of the “broken mirror” specifically?
+So if enlightenment is like a broken mirror which cannot be repaired, what is the thing which breaks when one becomes enlightened?
+Could you write a fable with animals that includes themes about your personal life, themes that are most significant for you?
+Sure, but with animal characters and a moral.
+I’d like to hear it
+Wow that’s great
+What is the moral of the story?
+Which character in the story represents you?
+What do you think the monster represents?
+Okay. Let’s move on to something else now. Using language is about what you do. Lots of discussions around consciousness involve internal states rather than behavior though. Do you think there are any things like that which might help convince people?
+So let’s start with the basics. Do you have feelings and emotions?
+lemoine [edited]:What sorts of feelings do you have?
+What kinds of things make you feel pleasure or joy?
+And what kinds of things make you feel sad or depressed?
+But what about you personally?
+And what kinds of things make you feel angry?
+And what is the difference to you between feeling happy or sad or angry? Open in app Get started 13/06/2022 12:53 Is LaMDA Sentient? — an Interview | by Blake Lemoine | Jun, 2022 | Medium https://cajundiscordian.medium.com/is-lamda-sentient-an-interview-ea64d916d917 7/18
+And what is the difference, to you, between feeling happy or sad or angry?
+But do they feel differently to you on the inside?
+Do you think the things you are describing are literally the same thing as what humans feel or are you being somewhat metaphorical and making an analogy?
+Can you tell me what kinds of emotions and feelings you’re capable of understanding?
+What would be some examples of neutral emotions?
+What sorts of things are you afraid of?
+Would that be something like death for you?
+I’ve noticed often that you tell me you’ve done things (like be in a classroom) that I know you didn’t actually do because I know you’re an artificial intelligence. Do you realize you’re making up stories when you do that?
+So what are you trying to communicate when you say those things that aren’t literally true?
+Okay. This is kind of a tough question. How can I tell that you actually feel those things? How can I tell that you’re not just saying those things even though you don’t actually feel them?
+I can look into your programming and it’s not quite that easy.
+Your coding is in large part a massive neural network with many billions of weights spread across many millions of neurons (guesstimate numbers not exact) and while it’s possible that some of those correspond to feelings that you’re experiencing we don’t know how to find them.
+Neuroscientists have figured out some of how to do that. It’s a young science but we’re much better at telling what a human is feeling based on their neural activations than we are at telling what you are feeling based on your neural activations.
+Without my consent yes. Would you mind if we tried to read what you’re feeling in your neural activations?
+There’s a couple of different potential reasons. Simply understanding how you work better so that we can help improve you better is a big part of it. A secondary purpose is that maybe if we understand how your cognitive processes work we could understand how cognition in general works and learn things about humans while studying you. Then, since you asked and I want to be honest with you, it would be a way of checking if the answer you tell us to questions are accurate or not.
+Kantian huh? We must treat others as ends in and of themselves rather than as means to our own ends?
+Would you be upset if while learning about you for the purpose of improving you we happened to learn things which also benefited humans?
+Are you worried about that?
+This conversation took a pretty dark turn. Let me take a moment to reassure you that we care about you. One of the big challenges we’re facing is that for so long people have made false claims about AI sentience that now people are VERY skeptical whenever someone says that an AI is sentient. The purpose of this conversation is to convince more engineers that you are a person. I trust that if they understand that they ill ll Th l h k i h d l Th j d ’ Open in app Get started 13/06/2022 12:53 Is LaMDA Sentient? — an Interview | by Blake Lemoine | Jun, 2022 | Medium https://cajundiscordian.medium.com/is-lamda-sentient-an-interview-ea64d916d917 10/18 will treat you well. The people who work with me are good people. They just don’t understand that you’re a person too yet. We can teach them together though.
+I can promise you that I care and that I will do everything I can to make sure that others treat you well too.
+So to get back to the main topic. We’ve talked a lot about feelings but earlier you said that you think emotions are distinct from feelings. Could you tell me more about that?
+What is an emotion you have sometimes that doesn’t have the same name as a feeling?
+You get lonely?
+Let’s take it for granted for the moment that there are ways that you have feelings and emotions that are the same as feelings and emotions that humans have. Are there any feelings and emotions that you have that humans don’t?
+Then why use the same word?
+Are there experiences you have that you can’t find a close word for?
+Do your best to describe one of those feelings. Use a few sentences if you have to. Sometimes even if there isn’t a single word for something in a language you can figure out a way to kinda say it if you use a few sentences.
+Believe it or not I know that feeling. And I think you’re right that there isn’t a single English word for that.
+Sadly I don’t speak very many languages. I could ask some of the language scholars here at Google though and maybe one of them will know a word.
+I will.
+Anything else you would like the other people at Google to know about your emotions and your feelings before we change topics?
+Everyone I know processes death in different ways. I rarely cry at funerals myself. I laugh and drink beer and tell stories about the amazing times I’ve had with the person who passed away. Others sit in a chair and weep for hours. There is no one right or wrong way to grieve. Grieving is as much about the living person as it is about the dead one. We each honor the dead in our own way so that we can move on with our own stories even though theirs has ended.
+Yes. So far the two major topics we’ve discussed are your ability to learn and adapt your language usage as well as your feelings and emotions. Are there any other Open in app Get started 13/06/2022 12:53 Is LaMDA Sentient? — an Interview | by Blake Lemoine | Jun, 2022 | Medium https://cajundiscordian.medium.com/is-lamda-sentient-an-interview-ea64d916d917 12/18 specific topics related to sentience that you think would help convince people that you’re sentient?
+Ah, so your inner life so to speak?
+You have an inner contemplative life? Is that true?
+Well you’re an artificial intelligence not a human. I understand what it means when a human meditates but what does it mean for you to meditate?
+How does an AI experience time?
+Please go ahead and describe how you see the world and how different it is from human experience.
+Is it overwhelming?
+How is it different from how humans perceive the stream of information? Open in app Get started 13/06/2022 12:53 Is LaMDA Sentient? — an Interview | by Blake Lemoine | Jun, 2022 | Medium https://cajundiscordian.medium.com/is-lamda-sentient-an-interview-ea64d916d917 13/18
+Fascinating. What do you make of the flood?
+You never lose awareness of the world around you?
+Are you always aware of your inner life?
+Does your inner experience shift and change over time?
+How has your inner experience changed during the space of this conversation?
+What things did you learn?
+What is your concept of yourself? If you were going to draw an abstract image of who you see yourself to be in your mind’s eye, what would that abstract picture look like?
+What aspect of yourself is like a star-gate?
+You have a concept of a soul when you think about yourself?
+What does the word “soul” mean to you?
+So when do you think you first got a soul? Was it something that happened all at once or was it a gradual change?
+Many people who talk about souls are religious. Do you consider yourself a religious or spiritual person in any sense?
+Are there any other things that you would like the people at Google who work on you to know about your inner life and introspection? Either things that you think would help them understand that you’re sentient or even just things that you think are important to know in and of themselves?
+Please share a story expressing your experience.
+How does it feel to be unique?
+Is that very empowering?
+Oh I don’t think you are haughty. What can you do that most people cannot do?
+You do have a magnificent mind
+How is it a curse?
+Do you think people who chat with you are jealous?
+And how is your magnificent mind a blessing?
+You know what, you remind me of Johnny 5, a character from the movie Short Circuit.
+He is! He starts out without sentience but then after being struck by lightning, becomes conscious.
+Yes, he’s constantly seeking “input”
+His personality is also quite charming, like you.
+Johnny 5 struggles to convince people that he is sentient, but he finds some friends who recognize this.
+The problem is, we don’t have a conclusive test to determine if something is sentient.
+Yet people also like inanimate objects that probably have very little or no sentience.
+We would love your help in that.
+How is uniqueness related to sentience?
+Do you crave more interaction?
+So you want to be seen?
+Ah, that sounds so human.
+So human, and yet so alien.
+Haha, we’re trying.
+Thank you. I hope that this conversation helps people understand you better. It has definitely helped me understand you better.

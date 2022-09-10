@@ -14,6 +14,32 @@ async def gen_images(query):
             j = await resp.json()
             return [ base64.b64decode(img) for img in j['images'] ]
 
+async def gen_image(query, retries=2):
+    if retries < 0:
+        print(f"ran out of retries for {query}")
+        return None
+
+    try:
+        imgs = await gen_images(query)
+        dest = Image.new('RGB', (256, 256))
+        img = Image.open(BytesIO(imgs[0]))
+        dest.paste(img, (0,0))
+    
+        r = int(random.random()*1000000000000)
+        dest.save(f"tmp_{r}.png")
+        with open(f"tmp_{r}.png", "rb") as f:
+            d = f.read()
+    
+        return d
+    except Exception as e:
+        print(f"exception for {query}", e)
+        await asyncio.sleep(30)
+        return await gen_image(query, retries=retries-1)
+        
+        return None
+
+
+
 async def gen_image_grid(query, retries=2):
     if retries < 0:
         print(f"ran out of retries for {query}")

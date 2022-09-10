@@ -1,1 +1,5 @@
-*.png
+#*.png # png's are fine but just use git lfs
+*_token
+*_url
+*.swp
+__pycache__/

@@ -5,6 +5,7 @@ from dice import rollDie
 from imdb_plugin import *
 import requests 
 import discord
+from discord import FFmpegPCMAudio
 from discord.utils import get
 from discord.ext import commands, tasks
 import asyncio
@@ -19,11 +20,14 @@ from datetime import datetime, timedelta
 import time
 from flights import getMatchedFlights
 import random
-from dalle import gen_image_grid
+from dalle import gen_image, gen_image_grid
 from io import BytesIO
 
 import aiohttp
 import markov
+import news_feeds
+import bmovie_title_markov
+import bmovie_summary_markov
 
 
 def asyncget(url):
@@ -35,6 +39,9 @@ intents = discord.Intents.default()
 intents.typing = True
 intents.presences = True
 intents.members = True
+intents.message_content = True
+
+new_movies_added = []
 
 bot = commands.Bot(command_prefix='~', help_command=None, intents=intents)
 
@@ -54,12 +61,12 @@ dalle_images = {}
 @bot.event
 async def on_reaction_add(reaction, user):
     global dalle_channel
-    if reaction.message.channel.id != dalle_channel:
-        return
     print("on reaction add")
     print(reaction)
     print(reaction.message)
     print(reaction.message.attachments)
+    if reaction.message.channel.id != dalle_channel:
+        return
     attachments = reaction.message.attachments
     if len(attachments) > 0:
         img = attachments[0]
@@ -74,6 +81,8 @@ async def on_reaction_add(reaction, user):
                     f.write(await resp.read())
         
 
+voice = None
+
 @bot.event
 async def on_message(message):
     global conversation_mode
@@ -81,6 +90,23 @@ async def on_message(message):
     print("message >> " + message.content)
     if message.author == bot.user:
         return
+
+    if message.content.startswith("!title"):
+        m = 1
+        if message.content.startswith("!title "):
+            m = int(message.content.replace("!title ", ""))
+        for i in range(m):
+            await message.channel.send(bmovie_title_markov.gen_title())        
+
+    if message.content.startswith("!markovmovie"):
+        t = bmovie_title_markov.gen_title()
+        s = bmovie_summary_markov.gen_summary()
+        
+        query = re.sub(r' \([0-9]+\)$', '', t + " " + s)
+        print("making images for fake movie: " + query)
+        image = await gen_image(query)
+        await message.channel.send(f"{t}\n> {s}\n", file=discord.File(BytesIO(image), f"{query}.png"))
+        
 
     if message.content.startswith('hello'):
 
@@ -125,6 +151,7 @@ async def on_message(message):
         await message.channel.send(blah)
 
     achilles_channel = 999885857685250118
+    #achilles_channel = 788925423420964912
 
     # learn everything
     msgs = message.content.split("\n")
@@ -132,6 +159,57 @@ async def on_message(message):
         mmsgs = msg.split(". ")
         for mmsg in mmsgs:
             markov.learn_sentence(markov.brain, mmsg)
+
+
+    if message.content.startswith("!vc"):
+      global voice
+      user = message.author
+      if user.voice is None:
+        return
+      c = user.voice.channel
+      if not voice:
+        voice = await c.connect()
+      else:
+        voice.move_to(c)
+      
+    if message.content.startswith("!novc"):
+      await voice.disconnect()
+      voice = None
+
+    async def tts(user, text):
+      global voice
+      if voice is None: return
+      tries = 5
+      done = False
+      while not done and tries > 0:
+        try:
+          print("tryna make an mp3", text)
+          res = requests.post("https://ttsmp3.com/makemp3_new.php", data={"msg": text, "lang": "Justin", "source": "ttsmp3member", "user": 213928}, timeout=2)
+          #res = requests.post("https://ttsmp3.com/makemp3_new.php", data={"msg": text, "lang": "Justin", "source": "ttsmp3"}, timeout=2)
+          j = res.json()
+          print(j)
+          res = requests.get(j['URL'], timeout=2)
+          with open(j['MP3'], 'wb') as f:
+            f.write(res.content)
+          print("wrote audio file")
+          done = True
+        except Exception as e:
+          print(e)
+          tries -= 1
+          await asyncio.sleep(1)
+      if tries <= 0: return
+      audio = FFmpegPCMAudio(j['MP3'])
+      tries = 10
+      while True:
+        try:
+          voice.play(audio)
+          return
+        except:
+          if tries <= 0: return
+          tries -= 1
+          await asyncio.sleep(1)
+
+
 
     if message.content.startswith("achilles: ") or message.content.startswith("Achilles: ") or message.content.startswith("A: ") or message.content.startswith("a: "):
         if message.content.startswith("A: ") or message.content.startswith("a: "):
@@ -141,17 +219,32 @@ async def on_message(message):
         markov.learn_sentence(markov.brain, msg)
         word = random.choice(msg.split(" "))
         new_sentence = markov.generate_sentence(markov.brain, word)
-        await asyncio.sleep(1)
+        markov.learn_sentence(markov.brain, new_sentence)
+        sleeptime = len(new_sentence)/20.0
+        await asyncio.sleep(sleeptime)
         await message.channel.send("(Achilles) " + new_sentence)
 
-    elif 'achilles' in message.content or 'Achilles' in message.content or message.channel.id == achilles_channel:
+    elif message.channel.id == achilles_channel:
         msg = message.content
         markov.learn_sentence(markov.brain, msg)
         word = random.choice(msg.split(" "))
         new_sentence = markov.generate_sentence(markov.brain, word)
-        await asyncio.sleep(1)
-        await message.channel.send("(Achilles) " + new_sentence)
+        markov.learn_sentence(markov.brain, new_sentence)
+        sleeptime = len(new_sentence)/20.0
+        await asyncio.sleep(sleeptime)
+        await tts(message.author, new_sentence)
+        await message.channel.send(new_sentence)
 
+
+    elif 'achilles' in message.content or 'Achilles' in message.content:
+        msg = message.content
+        markov.learn_sentence(markov.brain, msg)
+        word = random.choice(msg.split(" "))
+        new_sentence = markov.generate_sentence(markov.brain, word)
+        markov.learn_sentence(markov.brain, new_sentence)
+        sleeptime = len(new_sentence)/20.0
+        await asyncio.sleep(sleeptime)
+        await message.channel.send("(Achilles) " + new_sentence)
 
 
     if message.content.startswith('free space') or message.content.startswith('Free space'):
@@ -184,7 +277,7 @@ async def on_message(message):
         conversation_mode = not conversation_mode
 
     if message.content.startswith('!dallehelp'):
-        await message.channel.send(f"How to use our lil' dalle:\n- Say anything into this chat. Judy will get a pic from dalle.\n- say !conversation to turn conversation mode on and off\n- Add a react to a photo to save it at this page http://bodygen.re:8055/")
+        await message.channel.send(f"How to use our lil' dalle:\n- Say anything into this chat. Judy will get a pic from dalle.\n- say !conversation to turn conversation mode on and off\n- Add a react to a photo to save it at this page http://bodygen.re/")
 
     if message.channel.id == dalle_channel:
         if message.content.startswith('!'):
@@ -239,6 +332,8 @@ async def on_message(message):
         else: 
     
             # TODO: save images that get emoji reacts
+            print(message)
+            print(message.content)
     
             query = message.content
             print("making images for " + query)
@@ -258,12 +353,14 @@ async def on_message(message):
             print('youdowning ', url)
             subprocess.Popen(["/home/hd1/tetsuharu/bin/youdown", url], stdout=subprocess.PIPE)
 
-    if message.content.startswith('hey bitch download! ') or message.content.startswith('Hey bitch download!') or message.content.startswith('download! ') or message.content.startswith('Download! '):
+    if message.content.startswith('hey bitch download! ') or message.content.startswith('Hey bitch download!') or message.content.startswith('download! ') or message.content.startswith('Download! ') or message.content.startswith('download!'):
 
         if "\n" in message.content:
             names = message.content.split("\n")[1:]
+            print("downloading bulk: ", "::".join(names))
+            await message.add_reaction('👀')
             for name in names:
-                await getbest(name, message.channel)
+                getbest(name, message.channel)
         else:
             name = re.sub(r'^([Hh]ey bitch download|[Dd]ownload)! ', '', message.content)
             await getbest(name, message.channel, message=message)
@@ -286,10 +383,11 @@ async def on_message(message):
             movies.append(f"{name} {year}")
         movies = list(set(movies))
 
+        await message.add_reaction('👀')
         for movie in movies:
             if "TV Series" in movie:
                 continue
-            await getbest(movie, message.channel, showmissing=False, message=message)
+            await getbest(movie, message.channel, showmissing=True, message=message)
 
     if message.content.startswith("search") or message.content.startswith("Search"):
         
@@ -331,10 +429,14 @@ async def on_message(message):
         
         if curr_list:
             # restrict list to ones with the search term in it
-            match_list = [ t for t in curr_list if re.match(".*" + search + ".*", t['name'], flags=re.IGNORECASE) ]
+            match_list = [ t for t in curr_list if re.match(".*" + search + ".*", t['name'], flags=re.IGNORECASE) and t['state'] != 'Seeding' ]
             matches = []
             for m in match_list:
-                matches.append(f"{int(m['eta']/6)/10}min\t{int(m['progress'])}%\t{int(m['download_payload_rate']/1024)}kbps\t{m['name']}")
+                eta = int(m['eta']/6)/10
+                prog = int(m['progress'])
+                rate = int(int(m['download_payload_rate'])/1024)
+                name = m['name']
+                matches.append("{: >10}min {: >4}% {: >6} kbps {}".format(eta, prog, rate, name))
             if len(matches) == 0:
                 await message.channel.send(f"Couldn't find any active torrents for `{search}`")
             else:
@@ -431,9 +533,7 @@ async def getbest(name, channel, showmissing=True, message=None):
         else:
             if message:
                 await message.add_reaction('\N{SPARKLES}')
-            else:
-                print(f"downloading `{name}`")
-                await channel.send(f"trying to download: `{j['torrent_name']}`")
+            await channel.send(f"downloading: `{j['torrent_name']}`")
 
 
 
@@ -450,6 +550,36 @@ def kill_backend():
     
 
 HEYBITCHDOWNLOAD_CHANNEL_ID = 944851560981225512
+
+@tasks.loop(hours=24)
+async def notify_new_movies():
+    global new_movies_added
+
+    await asyncio.sleep(5)
+    channel = bot.get_channel(HEYBITCHDOWNLOAD_CHANNEL_ID)
+
+    search = ".+"
+    curr_list = await asyncget("https://bodygen.re:8081/get_active_torrents")
+    
+    if curr_list:
+        # restrict list to ones with the search term in it
+        match_list = [ t for t in curr_list if re.match(".*" + search + ".*", t['name'], flags=re.IGNORECASE) and t['state'] != 'Seeding' ]
+        matches = []
+        for m in match_list:
+            eta = int(m['eta']/6)/10
+            prog = int(m['progress'])
+            rate = int(int(m['download_payload_rate'])/1024)
+            name = m['name']
+            matches.append("{: >10}min {: >4}% {: >6} kbps {}".format(eta, prog, rate, name))
+            
+    if len(new_movies_added) == 0:
+        new_movies_added.append("(none)")
+
+    if len(matches) == 0:
+        matches.append("(none)")
+
+    await channel.send("New movies added yesterday: \n```\n" + "\n".join(new_movies_added) + "\n```\n" + "Current torrent status: \n```\n" + "\n".join(matches)[:900] + "\n```")
+    new_movies_added = []
 
 torrents = {}
 shown_torrents = set()
@@ -493,6 +623,8 @@ async def check_torrents():
             new = curr[h]
             
             if old['state'] == "Downloading" and new['state'] == 'Seeding':
+                # TODO
+                new_movies_added.append(old['name'])
                 message.append(f"torrent complete - `{old['name']}`")
             
             if new['state'] != 'Seeding':
@@ -651,6 +783,34 @@ async def dalle_the_news():
         await channel.send(query+"\n"+url, file=discord.File(BytesIO(image), f"{query}.png"))
         
 
+@tasks.loop(minutes=5)
+async def markov_the_news():
+        global last_news_headline
+        print("markov_the_news")
+        xml = requests.get("https://news.google.com/rss/search?q=when:24h+allinurl:apnews.com&hl=en-US&gl=US&ceid=US:en").content
+        xml = ET.XML(xml)
+        item = xml.find('channel').findall('item')[-1]
+        title = item.find('title').text
+        if title in last_news_headlines:
+            return
+        last_news_headlines.add(title)
+        url = item.find('link').text
+        query = re.sub(r' - The Associated Press.*', '', title)
+        markov.learn_sentence(markov.brain, query)
+        
+
+last_npr_summaries = set()
+
+@tasks.loop(minutes=5)
+async def markov_the_npr_news():
+        global last_npr_summaries
+        print("markov_the_npr_news")
+        channels = [ 1019, 1017, 2047 ]
+        for chan in channels:
+            summaries = news_feeds.get_npr_news(chan)
+            for s in summaries:
+                markov.learn_sentence(markov.brain, s)
+        
 
 
 
@@ -659,14 +819,18 @@ async def dalle_the_news():
 
 
 
-check_torrents.start()
+
+#  check_torrents.start()
 #check_dead_meat.start()
 #check_current_movie.start()
 #get_new_youtube_movies.start()
-change_stream_bot_name.start()
+#   change_stream_bot_name.start()
 #dalle_the_news.start()
+#markov_the_news.start()
+#markov_the_npr_news.start()
+#    notify_new_movies.start()
 
-bot.run('OTQ0Nzk5MjE5MDk5NzY2ODc1.YhG21w.wecQSj-OQDsq00LW6-gn1goUFvM')
+bot.run(open("bot_token").read().strip())
 
 
 

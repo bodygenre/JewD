@@ -1,8 +1,0 @@
-source ~/anaconda3/envs/dalle/bin/activate
-git clone https://github.com/kuprel/min-dalle
-cd min-dalle
-git lfs install
-git clone https://huggingface.co/dalle-mini/vqgan_imagenet_f16_16384 ./pretrained/vqgan
-pip install torch flax wandb
-wandb login --anonymously
-wandb artifact get --root=./pretrained/dalle_bart_mini dalle-mini/dalle-mini/mini-1:v0

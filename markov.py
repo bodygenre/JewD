@@ -8,6 +8,15 @@ with open("markov.brain", "r") as f:
 
 # LEARN THINGS
 def learn_sentence(brain, sentence):
+  if "\n" in sentence:
+    sentences = sentence.split("\n")
+    for s in sentences:
+      learn_sentence(brain, s)
+    return
+
+  with open("learned_sentences.txt","a+") as f:
+    f.write(sentence + "\n")
+
   sentence_words = sentence.split(" ")
   
   for index in range(len(sentence_words)-1):
