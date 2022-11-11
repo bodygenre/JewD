@@ -1,4 +1,4 @@
-from plexclient import plex
+from modules.plexclient import plex
 import hashlib
 import random
 import datetime
@@ -34,10 +34,10 @@ if rerun:
         if words[-1] not in brain: brain[words[-1]] = []
         brain[words[-1]].append('.')
         titles.append(words)
-    with open('bmovie_title.brain','w') as f:
+    with open('data/bmovie_title.brain','w') as f:
         f.write(json.dumps({ "brain": brain, "titles": titles }))
 else:
-    with open('bmovie_title.brain') as f:
+    with open('data/bmovie_title.brain') as f:
         j = json.loads(f.read())
         brain = j['brain']
         titles = j['titles']
@@ -58,5 +58,17 @@ def gen_title():
     title = " ".join(c)
     fakeyear = int(hashlib.md5(title.encode('utf-8')).hexdigest(), 16) % 10 + 1980
     return title + f" ({fakeyear})"
+
+
+def register(bot):
+    @bot.command("!title")
+    async def title(ctx):
+        m = 1
+        if ctx.message.content.startswith("!title "):
+            m = int(ctx.message.content.replace("!title ", ""))
+        for i in range(m):
+            await ctx.send(gen_title())
+
+
 
 

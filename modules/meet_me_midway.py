@@ -58,10 +58,39 @@ def getMatchedFlights(airports,departDate,returnDate):
 
     return paredFlight
 
-if __name__ == '__main__':
-    # paredFlight = getMatchedFlights(["SFO","IND"],"20220508","20220511")
-    paredFlight = getMatchedFlights(["SFO","IND","MCO"],"20220508","20220511")
 
-    for price,city,airports,urls in paredFlight:
-        print(price,city,airports)
-        print(urls)
+
+async def on_message(message):
+    if message.content.startswith('meet me ') or message.content.startswith('Meet me '):
+        #await message.add_reaction(':mag_right:')
+        s = message.content[8:]
+        parts = s.split(" ")
+        end = parts.pop()
+        start = parts.pop()
+        airports = [ p.upper() for p in parts ]
+        flights = list(getMatchedFlights(airports, start, end))
+        res = []
+        for price, city, airports, urls in flights[-5:]:
+            p = f"${math.floor(price)}"
+            pp = f"${math.floor(price/len(airports))}/per"
+            u = "\n".join([ '<'+t+'>' for t in urls ])
+            a = ", ".join(airports)
+            res.append(p + "\t" + pp + "\t" + city + "\t" + a + "\n" + u)
+        await message.channel.send("\n".join(res))
+
+    if message.content.startswith('new'):
+        await dalle_the_news()
+        #xml = requests.get("https://news.google.com/rss/search?q=when:24h+allinurl:apnews.com&hl=en-US&gl=US&ceid=US:en").content
+        #xml = ET.XML(xml)
+        #title = xml.find('channel').findall('item')[-1].find('title').text
+        #query = re.sub(r' - The Associated Press.*', '', title)
+        #print("making images for " + query)
+        #image = await gen_image_grid(query)
+        #await message.channel.send(query, file=discord.File(BytesIO(image), f"{query}.png"))
+
+
+def register(bot):
+    pass
+
+
+

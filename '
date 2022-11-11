@@ -17,14 +17,12 @@ intents.message_content = True
 
 bot = commands.Bot(command_prefix='', intents=intents)
 
-previous_server_restart = datetime.now()
+revious_server_restart = datetime.now()
 
 
 on_message_handlers = []
 on_reaction_add_handlers = []
 
-
-bot.HEYBITCHDOWNLOAD_CHANNEL_ID = 944851560981225512
 
 @bot.event
 async def on_ready():
@@ -43,6 +41,21 @@ async def on_reaction_add(reaction, user):
         await handler(reaction, user)
 
 
+@bot.command(name='99')
+async def nine_nine(ctx):
+    brooklyn_99_quotes = [
+        'I\'m the human form of the 💯 emoji.',
+        'Bingpot!',
+        (
+            'Cool. Cool cool cool cool cool cool cool, '
+            'no doubt no doubt no doubt no doubt.'
+        ),
+    ]
+
+    response = random.choice(brooklyn_99_quotes)
+    await ctx.send(response)
+
+
 # import all modules/
 for t in glob.glob('modules/*.py'):
    __import__(t.replace('/','.')[0:-3])
@@ -58,5 +71,12 @@ for k, m in modules.__dict__.items():
             on_reaction_add_handlers.append(m.on_reaction_add)
 
 
-bot.run(TOKEN)
 
+
+print("bot config", bot.command_prefix)
+@bot.command(name='asdf')
+async def asdf(msg):
+    print("COMMAND: asdf")
+
+
+bot.run(TOKEN)

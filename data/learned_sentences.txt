@@ -31567,3 +31567,44 @@ $asdf
 !99
 download 2000 mules
 download 2000 mules
+download some sort of movie
+download some sort of movie
+download some sort of movie
+downloading: `5G Wireless Warfare - Radiation &amp; Mind Control 1080p - (0 leech / 1 seed) - 0.51gb`
+download radiation
+ok downloading works again
+
+Is anyone in this gc working in a tech company rn?
+yeah
+what's a gc
+but also yeah
+I work at LinkedIn, <@557419862826156042> works at a space company
+Gc is group chat
+ohh ok
+Okay I just was curious
+if you want a referral, let us know
+we get paid if you get hired
+Hahaha okay😂
+its like $15k sometimes
+no joke i want you to get hired lol
+Aw you’re sweet thank you
+I’m wondering if I should even apply with all the layoffs but I’m starting freelancing like you said
+you probably wont get hired until next year but it's okay to apply now
+most big companies have a rule where you can apply every 6 or 12 months
+they do want to hire you, and they want to give you a chance, because you might be fuckin awesome and they dont want to lose a chance at hiring you
+hahaha
+
+
+Yes, apply as often as you can
+A bit of advice I got:
+
+> Never take yourself out of the job market.
+Always apply
+Do interviews even when you're happy in your job.
+Someone might give you a better offer
+If they give you a better offer, you'd probably take it
+If you don't do interviews, you won't get a better offer.
+Some people avoid doing interviews because they're *afraid* of getting a better offer
+Not interviewing is their way around the issue.
+When enough people don't interview, it lowers salaries for all of us.
+ok <@557419862826156042> i refactored a lot and i think it's broken in some features we rarely use but it's refactored now
