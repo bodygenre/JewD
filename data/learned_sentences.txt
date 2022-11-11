@@ -31608,3 +31608,10 @@ Some people avoid doing interviews because they're *afraid* of getting a better 
 Not interviewing is their way around the issue.
 When enough people don't interview, it lowers salaries for all of us.
 ok <@557419862826156042> i refactored a lot and i think it's broken in some features we rarely use but it's refactored now
+now we gotta make HgaaS and wrap both of them
+I look forward to coding in HgaaS instead of ssh and vim
+I'm not worried
+I can piddle around with those things if they're broken
+Can you push your module code to Git? It'll feel so good to your coding ego 😉
+lol
+all my commit messages are 'asdf'
