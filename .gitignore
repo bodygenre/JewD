@@ -1,1 +1,4 @@
 *.png
+old saved
+**.swp
+**.pyc

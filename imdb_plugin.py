@@ -1,6 +1,6 @@
-from imdb import IMDb
+#from imdb import IMDb
 
-ia = IMDb()
+#ia = IMDb()
 
 def search_movie(movie):
     movies = ia.search_movie(movie)[0:10]
