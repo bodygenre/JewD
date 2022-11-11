@@ -7,7 +7,7 @@ from discord.ext import commands
 import discord
 from datetime import datetime
 
-TOKEN = "OTQ0Nzk5MjE5MDk5NzY2ODc1.Gru9vD.o5RMpayPhc5jfQIHtSHAd5wjN6kR-FB6-34Dcs"
+TOKEN = open('data/discord_token').read().strip()
 
 intents = discord.Intents.default()
 intents.typing = True
