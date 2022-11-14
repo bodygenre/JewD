@@ -1,18 +1,23 @@
-from plexclient import plex
+from modules.plexclient import plex
+import discord
 import hashlib
 import random
 import datetime
 import re
 import json
 
+from modules import bmovie_title_markov
+from modules.dalle import gen_image
+from io import BytesIO
+
 rerun = True
 #rerun = False
 
 if rerun:
     b = plex.library.section('B Movies')
-
+    
     bmovies = b.search()
-
+    
     brain = { '<start>': [] }
     summaries = []
     i=0
@@ -36,10 +41,10 @@ if rerun:
         if words[-1] not in brain: brain[words[-1]] = []
         brain[words[-1]].append('.')
         summaries.append(words)
-    with open('bmovie_summary.brain','w') as f:
+    with open('data/bmovie_summary.brain','w') as f:
         f.write(json.dumps({ "brain": brain, "summaries": summaries }))
 else:
-    with open('bmovie_summary.brain') as f:
+    with open('data/bmovie_summary.brain') as f:
         j = json.loads(f.read())
         brain = j['brain']
         summaries = j['summaries']
@@ -62,7 +67,16 @@ def gen_summary():
     return " ".join(summary)
 
 
-if __name__ == "__main__":
-    print(gen_summary())
+
+def register(bot):
+    @bot.command(name='!summary')
+    async def summary(ctx):
+        t = bmovie_title_markov.gen_title()
+        s = gen_summary()
+
+        query = re.sub(r' \([0-9]+\)$', '', t + " " + s)
+        print("making images for fake movie: " + query)
+        image = await gen_image(query)
+        await ctx.send(f"{t}\n> {s}\n", file=discord.File(BytesIO(image), f"{query}.png"))
 
 

@@ -58,3 +58,9 @@ def makeDiscordMinesweeper(width, height, mines):
 
 if __name__ == "__main__":
     print(makeDiscordMinesweeper(7, 7, 7))
+
+
+def register(bot):
+    pass
+
+

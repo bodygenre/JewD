@@ -1,5 +1,9 @@
-#*.png # png's are fine but just use git lfs
+*.png
+old saved
+**.swp
+**.pyc
 *_token
 *_url
-*.swp
+data
+data/discord_token data/plex_token
 __pycache__/
