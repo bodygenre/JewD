@@ -10,9 +10,9 @@ rerun = True
 
 if rerun:
     b = plex.library.section('B Movies')
-    
+
     bmovies = b.search()
-    
+
     brain = { '<start>': [] }
     summaries = []
     i=0
